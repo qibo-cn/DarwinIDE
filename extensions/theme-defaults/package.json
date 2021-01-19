@@ -32,14 +32,18 @@
 				"label": "%lightColorThemeLabel%",
 				"uiTheme": "vs",
 				"path": "./themes/light_vs.json"
-			},
+			}
+/*
+			,
 			{
 				"id": "Default High Contrast",
 				"label": "%hcColorThemeLabel%",
 				"uiTheme": "hc-black",
 				"path": "./themes/hc_black.json"
 			}
+*/
 		],
+
 		"iconThemes": [
 			{
 				"id": "vs-minimal",
