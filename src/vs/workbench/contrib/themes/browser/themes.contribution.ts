@@ -397,5 +397,5 @@ MenuRegistry.appendMenuItem(MenuId.MenubarAaaMenu, {
 		id: SelectColorThemeAction.ID,
 		title: localize('selectTheme.label', "Color Theme")
 	},
-	order: 1
+	order: 2
 });
