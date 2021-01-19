@@ -389,3 +389,13 @@ MenuRegistry.appendMenuItem(MenuId.GlobalActivity, {
 	},
 	order: 2
 });
+
+
+MenuRegistry.appendMenuItem(MenuId.MenubarAaaMenu, {
+	group: '1_themes',
+	command: {
+		id: SelectColorThemeAction.ID,
+		title: localize('selectTheme.label', "Color Theme")
+	},
+	order: 1
+});

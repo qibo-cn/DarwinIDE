@@ -111,7 +111,7 @@ export abstract class MenubarControl extends Disposable {
 			'Run': this._register(this.menuService.createMenu(MenuId.MenubarDebugMenu, this.contextKeyService)),
 			'Terminal': this._register(this.menuService.createMenu(MenuId.MenubarTerminalMenu, this.contextKeyService)),
 			'Help': this._register(this.menuService.createMenu(MenuId.MenubarHelpMenu, this.contextKeyService)),
-			'Aaa': this._register(this.menuService.createMenu(MenuId.MenubarGoMenu, this.contextKeyService)),
+			'Aaa': this._register(this.menuService.createMenu(MenuId.MenubarAaaMenu, this.contextKeyService)),
 			'Bbb': this._register(this.menuService.createMenu(MenuId.MenubarBbbMenu, this.contextKeyService))
 		};
 
