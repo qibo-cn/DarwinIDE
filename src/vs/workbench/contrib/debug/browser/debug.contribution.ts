@@ -210,7 +210,52 @@ function registerDebugMenu(): void {
 		},
 		order: 2
 	});
+	// transfrom menu
+	MenuRegistry.appendMenuItem(MenuId.MenubarDebugMenu, {
+		group: '1_debug',
+		command: {
+			id: TRANSFORM_FLOW_TO_CODE_ID,
+			title: nls.localize({ key: 'miTransform', comment: ['&& denotes a mnemonic'] }, "&&Transforming Flow Graph")
+		},
+		order: 1, //?
+		when: CONTEXT_DEBUGGERS_AVAILABLE
+	});
 
+	// training network menu
+	MenuRegistry.appendMenuItem(MenuId.MenubarDebugMenu, {
+		group: '1_debug',
+		command: {
+			id: TRAINING_NETWORK_ID,
+			title: nls.localize({ key: 'miTraining', comment: ['&& denotes a mnemonic'] },
+				"&&Training Network")
+		},
+		order: 1,
+		when: CONTEXT_DEBUGGERS_AVAILABLE
+	});
+
+	// compile darwinlang menu
+	MenuRegistry.appendMenuItem(MenuId.MenubarDebugMenu, {
+		group: '1_debug',
+		command: {
+			id: DARWIN_COMPILE_ID,
+			title: nls.localize({ key: 'miTraining', comment: ['&& denotes a mnemonic'] },
+				"&&Compile Darwinlang")
+		},
+		order: 1,
+		when: CONTEXT_DEBUGGERS_AVAILABLE
+	});
+
+	// compile darwinlang menu
+	MenuRegistry.appendMenuItem(MenuId.MenubarDebugMenu, {
+		group: '1_debug',
+		command: {
+			id: SIMULATE_NETWORK_ID,
+			title: nls.localize({ key: 'miTraining', comment: ['&& denotes a mnemonic'] },
+				"&&Simulate Neuron Network")
+		},
+		order: 1,
+		when: CONTEXT_DEBUGGERS_AVAILABLE
+	});
 	// Debug menu
 
 	MenuRegistry.appendMenuItem(MenuId.MenubarDebugMenu, {
