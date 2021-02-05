@@ -3,6 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import * as cp from 'child_process';
 import * as nls from 'vs/nls';
 import { KeyCode, KeyMod } from 'vs/base/common/keyCodes';
 import { List } from 'vs/base/browser/ui/list/listWidget';
@@ -30,7 +31,6 @@ import { IConfigurationService } from 'vs/platform/configuration/common/configur
 import { IQuickInputService } from 'vs/platform/quickinput/common/quickInput';
 import { IViewsService } from 'vs/workbench/common/views';
 import { deepClone } from 'vs/base/common/objects';
-import * as cp from 'child_process';
 
 export const ADD_CONFIGURATION_ID = 'debug.addConfiguration';
 export const TOGGLE_INLINE_BREAKPOINT_ID = 'editor.debug.action.toggleInlineBreakpoint';
@@ -398,13 +398,13 @@ export function registerCommands(): void {
 			await debugService.startDebugging(launch, clonedConfig || name, { noDebug: debugStartOptions && debugStartOptions.noDebug });
 		}
 	});
-// darwin flow
+	// darwin flow
 	KeybindingsRegistry.registerCommandAndKeybindingRule({
 		id: TRANSFORM_FLOW_TO_CODE_ID,
 		weight: KeybindingWeight.WorkbenchContrib,
 		primary: KeyMod.CtrlCmd | KeyCode.Alt,
 		mac: { primary: KeyMod.WinCtrl },
-		when: ContextKeyExpr.and(CONTEXT_TRANSFORM_AVAILABLE, CONTEXT_TRANSFORM_STATE.notEqualsTo(getStateLabel(State.Initializing))),
+		when: ContextKeyExpr.and(CONTEXT_DEBUGGERS_AVAILABLE, CONTEXT_DEBUG_STATE.notEqualsTo(getStateLabel(State.Initializing))),
 		handler: async (accessor: ServicesAccessor) => {
 			// TODO: replace file name
 			cp.exec('node /Users/kenny/work/github/parserdrawio/src/main.js /Users/kenny/work/github/parserdrawio/test/agc.drawio', (error, stdout, stderr) => {
@@ -423,7 +423,7 @@ export function registerCommands(): void {
 		weight: KeybindingWeight.WorkbenchContrib,
 		primary: KeyMod.CtrlCmd | KeyCode.Alt,
 		mac: { primary: KeyMod.WinCtrl },
-		when: ContextKeyExpr.and(CONTEXT_TRANSFORM_AVAILABLE, CONTEXT_TRANSFORM_STATE.notEqualsTo(getStateLabel(State.Initializing))),
+		when: ContextKeyExpr.and(CONTEXT_DEBUGGERS_AVAILABLE, CONTEXT_DEBUG_STATE.notEqualsTo(getStateLabel(State.Initializing))),
 		handler: async (accessor: ServicesAccessor) => {
 			// TODO: compile darwinlang
 		}
@@ -434,7 +434,7 @@ export function registerCommands(): void {
 		weight: KeybindingWeight.WorkbenchContrib,
 		primary: KeyMod.CtrlCmd | KeyCode.Alt,
 		mac: { primary: KeyMod.WinCtrl },
-		when: ContextKeyExpr.and(CONTEXT_TRANSFORM_AVAILABLE, CONTEXT_TRANSFORM_STATE.notEqualsTo(getStateLabel(State.Initializing))),
+		when: ContextKeyExpr.and(CONTEXT_DEBUGGERS_AVAILABLE, CONTEXT_DEBUG_STATE.notEqualsTo(getStateLabel(State.Initializing))),
 		handler: async (accessor: ServicesAccessor) => {
 			// TODO: start simulate
 		}
@@ -445,7 +445,7 @@ export function registerCommands(): void {
 		weight: KeybindingWeight.WorkbenchContrib,
 		primary: KeyMod.CtrlCmd | KeyCode.Alt,
 		mac: { primary: KeyMod.WinCtrl },
-		when: ContextKeyExpr.and(CONTEXT_TRANSFORM_AVAILABLE, CONTEXT_TRANSFORM_STATE.notEqualsTo(getStateLabel(State.Initializing))),
+		when: ContextKeyExpr.and(CONTEXT_DEBUGGERS_AVAILABLE, CONTEXT_DEBUG_STATE.notEqualsTo(getStateLabel(State.Initializing))),
 		handler: async (accessor: ServicesAccessor) => {
 			// TODO: start training network
 		}
