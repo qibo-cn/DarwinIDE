@@ -407,7 +407,7 @@ export function registerCommands(): void {
 		when: ContextKeyExpr.and(CONTEXT_DEBUGGERS_AVAILABLE, CONTEXT_DEBUG_STATE.notEqualsTo(getStateLabel(State.Initializing))),
 		handler: async (accessor: ServicesAccessor) => {
 			// TODO: replace file name
-			cp.exec('node /Users/kenny/work/github/parserdrawio/src/main.js /Users/kenny/work/github/parserdrawio/test/agc.drawio', (error, stdout, stderr) => {
+			cp.exec('node /Users/kenny/work/github/parserdrawio/src/main.js /Users/kenny/work/test/abc/model/darwinlang.drawio', (error, stdout, stderr) => {
 				if (error) {
 					console.log(error);
 				}
