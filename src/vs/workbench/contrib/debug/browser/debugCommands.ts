@@ -3,7 +3,8 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import * as cp from 'child_process';
+import * as childprocess from 'child_process';
+import { INativeEnvironmentService } from 'vs/platform/environment/common/environment';
 import * as nls from 'vs/nls';
 import { KeyCode, KeyMod } from 'vs/base/common/keyCodes';
 import { List } from 'vs/base/browser/ui/list/listWidget';
@@ -394,6 +395,7 @@ export function registerCommands(): void {
 			const debugService = accessor.get(IDebugService);
 			let { launch, name, getConfig } = debugService.getConfigurationManager().selectedConfiguration;
 			const config = await getConfig();
+			console.log("config: " + config);
 			const clonedConfig = deepClone(config);
 			await debugService.startDebugging(launch, clonedConfig || name, { noDebug: debugStartOptions && debugStartOptions.noDebug });
 		}
@@ -406,15 +408,13 @@ export function registerCommands(): void {
 		mac: { primary: KeyMod.WinCtrl },
 		when: ContextKeyExpr.and(CONTEXT_DEBUGGERS_AVAILABLE, CONTEXT_DEBUG_STATE.notEqualsTo(getStateLabel(State.Initializing))),
 		handler: async (accessor: ServicesAccessor) => {
-			// TODO: replace file name
-			cp.exec('node /Users/kenny/work/github/parserdrawio/src/main.js /Users/kenny/work/test/abc/model/darwinlang.drawio', (error, stdout, stderr) => {
-				if (error) {
-					console.log(error);
+			const nativeEnvironmentService = accessor.get(INativeEnvironmentService);
+			const editorService = accessor.get(IEditorService);
+			childprocess.exec('node ' + nativeEnvironmentService.appRoot + '/extensions/parserdrawio/src/main.js ' + editorService?.activeEditor?.resource?.fsPath, (error, stdout, stderr) => {
+				if (error instanceof Error) {
+					console.error(error);
+					throw error;
 				}
-				if (stderr) {
-					console.log(stderr);
-				}
-				console.log(stdout);
 			});
 		}
 	});
