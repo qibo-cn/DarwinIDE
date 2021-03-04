@@ -428,11 +428,13 @@ export function registerCommands(): void {
 		handler: async (accessor: ServicesAccessor) => {
 			const nativeEnvironmentService = accessor.get(INativeEnvironmentService);
 			const editorService = accessor.get(IEditorService);
-			childprocess.exec('node ' + nativeEnvironmentService.appRoot + '/extensions/parserdrawio/src/main.js ' + editorService?.activeEditor?.resource?.fsPath, (error, stdout, stderr) => {
+			childprocess.exec('python ' + nativeEnvironmentService.appRoot + '/extensions/mdlcompiler/darlang.py ' + editorService?.activeEditor?.resource?.fsPath, (error, stdout, stderr) => {
 				if (error instanceof Error) {
 					console.error(error);
 					throw error;
 				}
+				if (stdout) { console.log(stdout); }
+				if (stderr) { console.log(stderr); }
 			});
 		}
 	});

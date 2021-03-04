@@ -1,0 +1,6 @@
+[submodule "extensions/mdlcompiler"]
+	path = extensions/mdlcompiler
+	url = https://github.com/qibo-cn/MDLcompiler.git
+[submodule "extensions/parserdrawio"]
+	path = extensions/parserdrawio
+	url = https://github.com/qibo-cn/parserdrawio.git
