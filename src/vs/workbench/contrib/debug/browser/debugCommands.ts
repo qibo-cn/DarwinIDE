@@ -3,15 +3,9 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-<<<<<<< HEAD
-import * as childprocess from 'child_process';
-import { INativeEnvironmentService } from 'vs/platform/environment/common/environment';
-import * as path from 'path';
-=======
 import * as path from 'path';
 import * as childprocess from 'child_process';
 import { INativeEnvironmentService } from 'vs/platform/environment/common/environment';
->>>>>>> 9d51d85ed4803babf3791abf8860ee89e88ab5ac
 import * as nls from 'vs/nls';
 import { KeyCode, KeyMod } from 'vs/base/common/keyCodes';
 import { List } from 'vs/base/browser/ui/list/listWidget';
@@ -39,6 +33,7 @@ import { IConfigurationService } from 'vs/platform/configuration/common/configur
 import { IQuickInputService } from 'vs/platform/quickinput/common/quickInput';
 import { IViewsService } from 'vs/workbench/common/views';
 import { deepClone } from 'vs/base/common/objects';
+import { ILogService } from 'vs/platform/log/common/log';
 
 export const ADD_CONFIGURATION_ID = 'debug.addConfiguration';
 export const TOGGLE_INLINE_BREAKPOINT_ID = 'editor.debug.action.toggleInlineBreakpoint';
@@ -402,12 +397,11 @@ export function registerCommands(): void {
 			const debugService = accessor.get(IDebugService);
 			let { launch, name, getConfig } = debugService.getConfigurationManager().selectedConfiguration;
 			const config = await getConfig();
-			console.log("config: " + config);
 			const clonedConfig = deepClone(config);
 			await debugService.startDebugging(launch, clonedConfig || name, { noDebug: debugStartOptions && debugStartOptions.noDebug });
 		}
 	});
-	// darwin flow
+	// model training
 	KeybindingsRegistry.registerCommandAndKeybindingRule({
 		id: TRANSFORM_FLOW_TO_CODE_ID,
 		weight: KeybindingWeight.WorkbenchContrib,
@@ -417,7 +411,7 @@ export function registerCommands(): void {
 		handler: async (accessor: ServicesAccessor) => {
 			const nativeEnvironmentService = accessor.get(INativeEnvironmentService);
 			const editorService = accessor.get(IEditorService);
-			childprocess.exec('node ' + path.normalize(nativeEnvironmentService.appRoot + '/extensions/parserdrawio/src/main.js ') + editorService?.activeEditor?.resource?.fsPath, (error, stdout, stderr) => {
+			childprocess.exec('node ' + path.normalize(nativeEnvironmentService.appRoot + 'extensions/parserdrawio/src/main.js ') + editorService?.activeEditor?.resource?.fsPath, (error, stdout, stderr) => {
 				if (error instanceof Error) {
 					console.error(error);
 					throw error;
@@ -425,6 +419,7 @@ export function registerCommands(): void {
 			});
 		}
 	});
+	// Darwin MDL compile
 	KeybindingsRegistry.registerCommandAndKeybindingRule({
 		id: DARWIN_COMPILE_ID,
 		weight: KeybindingWeight.WorkbenchContrib,
@@ -434,17 +429,25 @@ export function registerCommands(): void {
 		handler: async (accessor: ServicesAccessor) => {
 			const nativeEnvironmentService = accessor.get(INativeEnvironmentService);
 			const editorService = accessor.get(IEditorService);
-			childprocess.exec('python ' + nativeEnvironmentService.appRoot + '/extensions/mdlcompiler/darlang.py ' + editorService?.activeEditor?.resource?.fsPath, (error, stdout, stderr) => {
-				if (error instanceof Error) {
-					console.error(error);
-					throw error;
-				}
-				if (stdout) { console.log(stdout); }
-				if (stderr) { console.log(stderr); }
-			});
+			const logService = accessor.get(ILogService);
+			if (editorService?.activeEditor?.resource?.fsPath) {
+				let mdlcompile = nativeEnvironmentService.appRoot + '/extensions/mdlcompiler/darlang.py';
+				let child = childprocess.spawn('/opt/anaconda3/bin/python', [mdlcompile, editorService?.activeEditor?.resource?.fsPath], { stdio: 'inherit' });
+				logService.info('darwin compile ~~~~');
+
+				// child?.stdout?.on('data', function (data) { logService.info(data);; });
+
+				// cp?.stdout?.on("data", function (data) {
+				// 	console.log(data.toString());
+				// });
+
+				// cp?.stderr?.on("data", function (data) {
+				// 	console.error(data.toString());
+				// });
+			}
 		}
 	});
-
+	// simulation
 	KeybindingsRegistry.registerCommandAndKeybindingRule({
 		id: SIMULATE_NETWORK_ID,
 		weight: KeybindingWeight.WorkbenchContrib,
@@ -463,7 +466,21 @@ export function registerCommands(): void {
 		mac: { primary: KeyMod.WinCtrl },
 		when: ContextKeyExpr.and(CONTEXT_DEBUGGERS_AVAILABLE, CONTEXT_DEBUG_STATE.notEqualsTo(getStateLabel(State.Initializing))),
 		handler: async (accessor: ServicesAccessor) => {
-			// TODO: start training network
+			const editorService = accessor.get(IEditorService);
+			const logService = accessor.get(ILogService);
+			if (editorService?.activeEditor?.resource?.fsPath) {
+				// TODO: 'folders[0]': only training one model in one project in one workspace
+				childprocess.exec('python ' + editorService?.activeEditor?.resource?.fsPath, (error, stdout, stderr) => {
+					if (error) {
+						console.log(error);
+						logService.error(error);
+						throw error;
+					}
+					if (stdout) { console.log(stdout); }
+					if (stderr) { console.log(stderr); }
+				});
+
+			}
 		}
 	});
 	KeybindingsRegistry.registerCommandAndKeybindingRule({
