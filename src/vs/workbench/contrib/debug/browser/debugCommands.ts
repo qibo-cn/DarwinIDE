@@ -431,8 +431,10 @@ export function registerCommands(): void {
 			const editorService = accessor.get(IEditorService);
 			const logService = accessor.get(ILogService);
 			if (editorService?.activeEditor?.resource?.fsPath) {
+				let index = editorService?.activeEditor?.resource?.fsPath.lastIndexOf('/');
+				let projectDir = editorService?.activeEditor?.resource?.fsPath.substring(0, index + 1);
 				let mdlcompile = nativeEnvironmentService.appRoot + '/extensions/mdlcompiler/darlang.py';
-				let child = childprocess.spawn('/opt/anaconda3/bin/python', [mdlcompile, editorService?.activeEditor?.resource?.fsPath], { stdio: 'inherit' });
+				let child = childprocess.spawn('/opt/anaconda3/bin/python', [mdlcompile, editorService?.activeEditor?.resource?.fsPath], { stdio: 'inherit', cwd: projectDir });
 				logService.info('darwin compile ~~~~');
 
 				// child?.stdout?.on('data', function (data) { logService.info(data);; });
